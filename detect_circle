@@ -1,0 +1,16 @@
+import cv2
+import numpy as np
+img = cv2.imread('balls.jfif',0)
+img = cv2.medianBlur(img,5)
+cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+colors = np.random.uniform(0, 255, 3)
+font = cv2.FONT_HERSHEY_PLAIN
+circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,
+                            param1=50,param2=30,minRadius=1,maxRadius=100)
+circles = np.uint16(np.around(circles))
+for i in circles[0,:]:
+    cv2.rectangle(cimg, pt1=(i[0]-i[2], i[1]+i[2]), pt2=(i[0]+i[2], i[1]-i[2]), color = (255, 0, 0), thickness=3)
+    cv2.putText(cimg, "Circle", (i[0]-i[2], i[1]+i[2]), font, 1, colors, 1)
+cv2.imshow('detected circles',cimg)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
